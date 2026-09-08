@@ -26,7 +26,15 @@ const ensureSubject = async (userId, subjectId) =>
 
 const list = (type) => async (req, res) => {
     const filter = { userId: req.user._id };
-    if (req.query.subjectId) filter.subjectId = req.query.subjectId;
+    if (type === "attendance") {
+        const subjects = await Subject.find({ userId: req.user._id }).select("_id");
+        const subjectIds = subjects.map((subject) => subject._id);
+        filter.subjectId = req.query.subjectId
+            ? { $in: subjectIds.filter((subjectId) => String(subjectId) === req.query.subjectId) }
+            : { $in: subjectIds };
+    } else if (req.query.subjectId) {
+        filter.subjectId = req.query.subjectId;
+    }
     const items = await populate(models[type].find(filter).sort({ createdAt: -1 }), type);
     res.json({ data: items, [type]: items });
 };
@@ -51,6 +59,7 @@ const update = (type) => async (req, res) => {
 const remove = (type) => async (req, res) => {
     const item = await models[type].findOneAndDelete({ _id: req.params.id, userId: req.user._id });
     if (!item) return res.status(404).json({ message: `${singular(type)} not found` });
+    if (type === "subjects") await Attendance.deleteMany({ userId: req.user._id, subjectId: item._id });
     res.json({ message: "Deleted successfully" });
 };
 const complete = async (req, res) => {
@@ -65,7 +74,11 @@ const noteFile = async (req, res) => {
 };
 const attendanceStats = async (req, res) => {
     const match = { userId: req.user._id };
-    if (req.query.subjectId) match.subjectId = req.query.subjectId;
+    const subjects = await Subject.find({ userId: req.user._id }).select("_id");
+    const subjectIds = subjects.map((subject) => String(subject._id));
+    match.subjectId = req.query.subjectId && subjectIds.includes(req.query.subjectId)
+        ? req.query.subjectId
+        : { $in: req.query.subjectId ? [] : subjects.map((subject) => subject._id) };
     const rows = await Attendance.aggregate([
         { $match: match },
         { $group: { _id: { subjectId: "$subjectId", status: "$status" }, count: { $sum: 1 } } },
@@ -89,13 +102,17 @@ const attendanceStats = async (req, res) => {
     res.json({ data, subjects: data, total, present, absent: total - present, percentage: total ? Math.round(present * 10000 / total) / 100 : 0 });
 };
 const dashboard = async (req, res) => {
-    const [totalSubjects, tasks, recentNotes, totalNotes, attendance] = await Promise.all([
-        Subject.countDocuments({ userId: req.user._id }),
+    const [subjects, tasks, recentNotes, totalNotes] = await Promise.all([
+        Subject.find({ userId: req.user._id }).select("_id"),
         Task.find({ userId: req.user._id, completed: false }).sort({ deadline: 1 }).populate("subjectId", "name"),
         Note.find({ userId: req.user._id }).sort({ updatedAt: -1, createdAt: -1 }).limit(1).populate("subjectId", "name"),
-        Note.countDocuments({ userId: req.user._id }),
-        Attendance.aggregate([{ $match: { userId: req.user._id } }, { $group: { _id: "$status", count: { $sum: 1 } } }])
+        Note.countDocuments({ userId: req.user._id })
     ]);
+    const subjectIds = subjects.map((subject) => subject._id);
+    const totalSubjects = subjects.length;
+    const attendance = subjectIds.length
+        ? await Attendance.aggregate([{ $match: { userId: req.user._id, subjectId: { $in: subjectIds } } }, { $group: { _id: "$status", count: { $sum: 1 } } }])
+        : [];
     const totals = { Present: 0, Absent: 0 };
     attendance.forEach((row) => { totals[row._id] = row.count; });
     const attendanceTotal = totals.Present + totals.Absent;

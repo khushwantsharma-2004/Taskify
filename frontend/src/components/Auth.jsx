@@ -20,8 +20,9 @@ export default function Auth({ mode }) {
       else navigate("/login", { state: { message: "Registration successful. Please log in." } });
     } catch (requestError) { setError(messageOf(requestError)); } finally { setBusy(false); }
   };
-  return <div className="auth-shell"><div className="auth-card">
-    <div className="brand">Taskify</div>
+  return <div className="auth-shell"><div className="auth-orbit auth-orbit-one" /><div className="auth-orbit auth-orbit-two" /><div className="auth-card">
+    <div className="brand"><span className="brand-mark">T</span><span>Taskify</span></div>
+    <span className="auth-kicker">A calmer way to keep up</span>
     <h1>{mode === "login" ? "Welcome back" : "Create your account"}</h1>
     <p className="muted">{mode === "login" ? "Manage your college routine in one place." : "Start organizing your subjects, tasks and attendance."}</p>
     <form className="form" onSubmit={submit}>
