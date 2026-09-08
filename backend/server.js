@@ -1,3 +1,6 @@
+const dns = require('node:dns');
+dns.setDefaultResultOrder('ipv4first');
+
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -11,7 +14,7 @@ connectDB();
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || "https://study-track-lac.vercel.app" }));
+app.use(cors({ origin: process.env.CLIENT_URL || "https://localhost:5173" }));
 
 // app.options("*", cors());
 app.use(express.json({ limit: "3mb" }));
