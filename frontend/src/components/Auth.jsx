@@ -21,7 +21,7 @@ export default function Auth({ mode }) {
     } catch (requestError) { setError(messageOf(requestError)); } finally { setBusy(false); }
   };
   return <div className="auth-shell"><div className="auth-card">
-    <div className="brand">StudyTrack</div>
+    <div className="brand">Taskify</div>
     <h1>{mode === "login" ? "Welcome back" : "Create your account"}</h1>
     <p className="muted">{mode === "login" ? "Manage your college routine in one place." : "Start organizing your subjects, tasks and attendance."}</p>
     <form className="form" onSubmit={submit}>
