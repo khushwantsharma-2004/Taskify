@@ -472,7 +472,7 @@ button {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-@media (max-width: 680px) {
+@media (max-width: 900px) {
   .layout {
     display: block;
     width: 100%;
@@ -612,7 +612,7 @@ button {
   padding: 0;
 }
 
-@media (max-width: 680px) {
+@media (max-width: 900px) {
   .attendance-form-card .form {
     grid-template-columns: 1fr;
   }
@@ -1168,7 +1168,7 @@ a {
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 900px) {
   .sidebar {
     padding: 18px 16px 16px;
   }
