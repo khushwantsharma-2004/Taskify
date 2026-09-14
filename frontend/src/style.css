@@ -481,11 +481,30 @@ button {
   .sidebar {
     width: 100%;
     padding: 14px 16px;
+    overflow: visible;
+  }
+  .mobile-menu {
+    display: block;
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    z-index: 2;
+    padding: 9px 12px;
+    border: 1px solid rgb(255 255 255 / 14%);
+    border-radius: 8px;
+    background: var(--navy-light);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
   }
   .sidebar .brand {
     padding: 0 0 12px;
   }
   .nav {
+    display: none;
+  }
+  .nav.open {
+    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
   }
@@ -495,8 +514,12 @@ button {
     white-space: normal;
   }
   .logout {
+    display: none;
     margin: 10px 0 0;
     width: 100%;
+  }
+  .sidebar.menu-open .logout {
+    display: block;
   }
   .topbar {
     padding: 14px 16px;
