@@ -1170,7 +1170,13 @@ a {
 
 @media (max-width: 900px) {
   .sidebar {
+    width: 100%;
+    flex: none;
     padding: 18px 16px 16px;
+  }
+
+  .main {
+    width: 100%;
   }
 
   .sidebar-kicker {
