@@ -1109,6 +1109,15 @@ a {
   .content {
     padding: 30px;
   }
+
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title,
+  .dashboard-attendance-result {
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 680px) {
@@ -1124,9 +1133,18 @@ a {
     padding: 10px 12px;
   }
 
+  .nav {
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+
   .topbar {
     min-height: 78px;
     padding: 16px;
+    gap: 12px;
   }
 
   .topbar h1 {
@@ -1137,6 +1155,8 @@ a {
     max-width: 145px;
     overflow: hidden;
     white-space: nowrap;
+    flex-shrink: 1;
+    text-overflow: ellipsis;
   }
 
   .content {
@@ -1151,11 +1171,68 @@ a {
     width: 100%;
   }
 
+  .toolbar .actions > button {
+    flex: 1;
+  }
+
+  .section-title {
+    flex-wrap: wrap;
+  }
+
+  .section-title > div {
+    min-width: 0;
+  }
+
+  .dashboard-attendance .section-title {
+    display: grid;
+  }
+
+  .dashboard-attendance .section-title .attendance-select {
+    width: 100%;
+  }
+
   .auth-card {
     padding: 28px 24px;
   }
 
   .auth-card h1 {
     font-size: 2rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .content {
+    padding: 20px 12px 28px;
+  }
+
+  .topbar {
+    padding: 14px 12px;
+  }
+
+  .topbar h1 {
+    font-size: 1.3rem;
+  }
+
+  .topbar-name {
+    padding-right: 8px;
+    font-size: 0.8rem;
+  }
+
+  .topbar-name::before {
+    width: 20px;
+    height: 20px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .stats .card {
+    min-height: 112px;
+  }
+
+  .table-wrap {
+    padding-right: 8px;
+    padding-left: 8px;
   }
 }
