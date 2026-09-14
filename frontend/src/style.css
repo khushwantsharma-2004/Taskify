@@ -472,10 +472,10 @@ button {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
   .layout {
     display: block;
-    width: 100%;
+    width: 100vw;
     overflow-x: hidden;
   }
   .sidebar {
@@ -1168,15 +1168,16 @@ a {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
   .sidebar {
-    width: 100%;
+    width: 100vw !important;
+    max-width: none;
     flex: none;
     padding: 18px 16px 16px;
   }
 
   .main {
-    width: 100%;
+    width: 100vw;
   }
 
   .sidebar-kicker {
