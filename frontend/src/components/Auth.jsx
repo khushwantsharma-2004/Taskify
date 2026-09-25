@@ -12,6 +12,7 @@ export default function Auth({ mode }) {
   const submit = async (event) => {
     event.preventDefault(); setError("");
     if (!form.email || !form.password || (mode === "register" && !form.name)) return setError("Please fill in all required fields.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) return setError("Please enter a valid email address.");
     setBusy(true);
     try {
       const response = await api.post(`/auth/${mode}`, mode === "register" ? { ...form, semester: form.semester ? Number(form.semester) : undefined } : { email: form.email, password: form.password });
